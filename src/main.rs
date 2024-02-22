@@ -7,13 +7,18 @@ use std::io::BufReader;// Wrapper for File or Network Streams to Streamline
 use std::time::Instant; // To measure Time Taken
 
 fn main() {
+    // We must get 2 inputs in CLI (One is the path to Original File and Second is the Target Location)
     if args().len() != 3 {
+        // eprintln! to print to error panel
         eprintln!("Invalid Input\nExpected Use: 'Source' 'Target'");
         return;
     }
+    // Read Input File
     let mut input = BufReader::new(File::open(args().nth(1).unwrap()).unwrap());
+    // Create a Empty Output File
     let output = File::create(args().nth(2).unwrap()).unwrap();
     let mut encoder = GzEncoder::new(output, Compression::default());
+    // Starting the Timer
     let timer = Instant::now();
     copy(&mut input, &mut encoder).unwrap();
     let output = encoder.finish().unwrap();
